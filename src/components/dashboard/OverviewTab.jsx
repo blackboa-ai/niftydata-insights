@@ -4,24 +4,20 @@ import { Activity, DollarSign, TrendingUp, Users, Loader2 } from 'lucide-react';
 import MetricCard from './MetricCard';
 
 export default function OverviewTab() {
-  // 1. Set up state for our live data and loading status
   const [chartData, setChartData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 2. useEffect runs automatically when the component mounts
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
-        // Fetching real 7-day Bitcoin to INR data from a free, open API
         const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=inr&days=7&interval=daily');
         const rawData = await response.json();
 
-        // 3. Transform the raw API data array into the exact format Recharts needs
         const formattedData = rawData.prices.slice(0, 7).map(item => {
           const date = new Date(item[0]);
           return {
             name: date.toLocaleDateString('en-IN', { weekday: 'short' }),
-            value: Math.round(item[1]) // Price in INR
+            value: Math.round(item[1])
           };
         });
 
@@ -29,12 +25,12 @@ export default function OverviewTab() {
       } catch (error) {
         console.error("Failed to fetch live data:", error);
       } finally {
-        setIsLoading(false); // Turn off the loading spinner
+        setIsLoading(false);
       }
     };
 
     fetchLiveData();
-  }, []); // The empty array ensures this only fetches once when the tab opens
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -45,8 +41,8 @@ export default function OverviewTab() {
         <MetricCard title="Active Retail" value="4.5M" change={5.1} isPositive={true} icon={Users} />
       </div>
 
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-slate-200 mb-6 flex items-center justify-between">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm dark:shadow-none transition-colors">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-200 mb-6 flex items-center justify-between">
           <span>Live Market Trend (BTC/INR)</span>
           {isLoading && <Loader2 className="animate-spin text-emerald-500" size={20} />}
         </h3>
@@ -60,9 +56,8 @@ export default function OverviewTab() {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} className="dark:stroke-slate-800" />
                 <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#64748b' }} axisLine={false} tickLine={false} />
-                {/* Formats the massive INR number into a cleaner "Lakh" format on the Y-Axis */}
                 <YAxis 
                   stroke="#64748b" 
                   tick={{ fill: '#64748b' }} 
@@ -72,7 +67,7 @@ export default function OverviewTab() {
                   tickFormatter={(val) => `₹${(val/100000).toFixed(1)}L`}
                 />
                 <Tooltip 
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', color: '#f1f5f9' }}
+                  contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: '#1e293b', color: '#f1f5f9', borderRadius: '8px' }}
                   itemStyle={{ color: '#10b981' }}
                   formatter={(value) => [`₹${value.toLocaleString('en-IN')}`, 'Price']}
                 />

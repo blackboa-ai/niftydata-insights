@@ -1,48 +1,58 @@
 import React from 'react';
-import { TrendingUp, BarChart2, PieChart, Home } from 'lucide-react';
+import { LayoutDashboard, BarChart3, PieChart, Wallet, X, TrendingUp } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab }) {
+export default function Sidebar({ activeTab, setActiveTab, isOpen, setIsOpen }) {
   const navItems = [
-    { id: 'overview', label: 'Market Overview', icon: Home },
-    { id: 'nifty100', label: 'Nifty 100 Analytics', icon: TrendingUp },
-    { id: 'sectors', label: 'Sector Performance', icon: BarChart2 },
-    { id: 'portfolio', label: 'Custom Watchlist', icon: PieChart },
+    { id: 'overview', label: 'Market Overview', icon: LayoutDashboard },
+    { id: 'nifty100', label: 'Nifty 100 Analytics', icon: BarChart3 },
+    { id: 'sectors', label: 'Sector Performance', icon: PieChart },
+    { id: 'portfolio', label: 'Custom Watchlist', icon: Wallet },
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 text-slate-300 flex flex-col justify-between hidden md:flex">
-      <div>
-        <div className="p-6 border-b border-slate-800">
-          <h1 className="text-xl font-bold text-white tracking-wider flex items-center gap-2">
-            <TrendingUp className="text-emerald-500" /> NiftyData
-          </h1>
-          <p className="text-xs text-slate-500 mt-1">Financial Market Analytics</p>
+    <>
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-40 md:hidden"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}>
+        <div className="flex items-center justify-between h-16 px-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2 text-emerald-500">
+            <TrendingUp size={24} />
+            <span className="text-xl font-bold text-slate-900 dark:text-slate-100">NiftyData</span>
+          </div>
+          <button className="md:hidden text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200" onClick={() => setIsOpen(false)}>
+            <X size={20} />
+          </button>
         </div>
-        <nav className="p-4 space-y-1">
+        
+        <nav className="p-4 space-y-2">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    : 'hover:bg-slate-800 text-slate-400 hover:text-white'
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsOpen(false);
+                }}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  isActive 
+                    ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400' 
+                    : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
               >
                 <Icon size={18} />
-                {item.label}
+                <span className="font-medium">{item.label}</span>
               </button>
             );
           })}
         </nav>
       </div>
-      <div className="p-4 border-t border-slate-800 text-xs text-slate-500 flex items-center justify-between">
-        <span>Tech Lead Mode</span>
-        <span className="text-emerald-400 font-mono">v0.1.0</span>
-      </div>
-    </aside>
+    </>
   );
 }

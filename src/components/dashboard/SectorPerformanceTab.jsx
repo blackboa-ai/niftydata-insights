@@ -13,17 +13,17 @@ const sectorData = [
 export default function SectorPerformanceTab() {
   return (
     <div className="space-y-6">
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-slate-200 mb-6">Sector Wise Performance (%)</h3>
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm dark:shadow-none transition-colors">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-200 mb-6">Sector Wise Performance (%)</h3>
         <div className="h-96">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={sectorData} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" horizontal={true} vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={true} vertical={false} className="dark:stroke-slate-800" />
               <XAxis type="number" stroke="#64748b" tick={{ fill: '#64748b' }} axisLine={false} tickLine={false} />
               <YAxis dataKey="name" type="category" stroke="#64748b" tick={{ fill: '#64748b' }} axisLine={false} tickLine={false} width={80} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', color: '#f1f5f9' }}
-                cursor={{fill: '#1e293b', opacity: 0.4}}
+                contentStyle={{ backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: '#1e293b', color: '#f1f5f9', borderRadius: '8px' }}
+                cursor={{fill: '#94a3b8', opacity: 0.1}}
               />
               <Bar dataKey="performance" radius={[0, 4, 4, 0]} barSize={32}>
                 {sectorData.map((entry, index) => (
