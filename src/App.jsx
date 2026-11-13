@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import Sidebar from './components/layout/Sidebar';
+import OverviewTab from './components/dashboard/OverviewTab';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('overview');
+
+  const renderContent = () => {
+    if (activeTab === 'overview') return <OverviewTab />;
+    return (
+      <div className="border border-dashed border-slate-800 rounded-xl p-8 text-center text-slate-500">
+        {activeTab} module in development. Awaiting next PR.
+      </div>
+    );
+  };
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 font-sans">
@@ -19,9 +29,7 @@ export default function App() {
         </header>
 
         <div className="flex-1 p-6 overflow-y-auto">
-          <div className="border border-dashed border-slate-800 rounded-xl p-8 text-center text-slate-500">
-            Layout initialized successfully. Awaiting PR #2.
-          </div>
+          {renderContent()}
         </div>
       </main>
     </div>
